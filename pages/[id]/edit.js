@@ -4,6 +4,7 @@ import { Form, Loader, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import absoluteUrl from 'next-absolute-url';
 
+
 const EditNote = ({ note }) => {
     const [data, setData] = useState({
         title: note.title,
@@ -105,6 +106,7 @@ const EditNote = ({ note }) => {
 
 export default EditNote;
 
+
 export async function getServerSideProps({ params: { id }, req }) {
     const host = absoluteUrl(req, req.headers.host);
     const { data } = await axios.get(`${host.origin}/api/notes/${id}`);
@@ -114,3 +116,4 @@ export async function getServerSideProps({ params: { id }, req }) {
         },
     };
 }
+

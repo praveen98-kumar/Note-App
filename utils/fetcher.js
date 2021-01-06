@@ -8,3 +8,4 @@ const fetcher = async (url) => {
 };
 
 export default fetcher;
+
