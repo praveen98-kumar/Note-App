@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Loader, Button } from 'semantic-ui-react';
-import connectDB from '../../utils/connectDB';
-import Note from '../../models/Note';
+import axios from 'axios';
+import absoluteUrl from 'next-absolute-url';
+
 
 const EditNote = ({ note }) => {
     const [data, setData] = useState({
@@ -105,13 +106,14 @@ const EditNote = ({ note }) => {
 
 export default EditNote;
 
-export async function getServerSideProps({ params }) {
-    await connectDB();
 
-    const note = await Note.findById(params.id).lean();
-    note._id = note._id.toString();
-    note.createdAt = note.createdAt.toString();
-    note.updatedAt = note.updatedAt.toString();
-
-    return { props: { note } };
+export async function getServerSideProps({ params: { id }, req }) {
+    const host = absoluteUrl(req, req.headers.host);
+    const { data } = await axios.get(`${host.origin}/api/notes/${id}`);
+    return {
+        props: {
+            note: data.note,
+        },
+    };
 }
+
